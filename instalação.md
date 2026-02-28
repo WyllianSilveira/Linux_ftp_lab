@@ -64,11 +64,11 @@ sudo systemctl start vsftpd
 ````
 Explicação dos comandos
 
-systemctl enable vsftpd
+`systemctl enable vsftpd`
 Configura o serviço para iniciar automaticamente junto com o sistema operacional (boot).
 Esse comando cria os links simbólicos necessários dentro do systemd para que o daemon seja carregado sempre que o servidor for reiniciado.
 
-systemctl start vsftpd
+`systemctl start vsftpd`
 Inicia o serviço imediatamente, na sessão atual, sem necessidade de reinicializar o sistema.
 Esse comando é pontual e não garante que o serviço subirá automaticamente no próximo boot, caso o enable não tenha sido executado.
 

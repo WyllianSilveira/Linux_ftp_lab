@@ -1,0 +1,245 @@
+# 01 - Teoria do FTP e vsftpd
+
+## 1. Introdução ao FTP
+
+FTP (File Transfer Protocol) é um protocolo de aplicação utilizado para transferência de arquivos em redes TCP/IP.
+
+Foi definido na RFC 959 e opera no modelo cliente-servidor.
+
+O protocolo utiliza conexões TCP para controle e transferência de dados.
+
+---
+
+## 2. Portas Utilizadas
+
+O FTP trabalha com duas conexões distintas:
+
+- Porta 21/TCP → Canal de Controle
+- Porta 20/TCP ou portas altas → Canal de Dados
+
+### Canal de Controle
+Responsável por:
+- Autenticação
+- Comandos (LIST, GET, PUT, etc.)
+- Respostas do servidor
+
+### Canal de Dados
+Responsável pela transferência efetiva de arquivos e listagens.
+
+---
+
+## 3. Modos de Operação
+
+### 3.1 Active Mode
+
+Fluxo:
+
+1. Cliente conecta ao servidor na porta 21.
+2. Cliente informa ao servidor qual porta está aberta.
+3. Servidor inicia conexão de dados de volta ao cliente pela porta 20.
+
+Problema:
+- Frequentemente bloqueado por NAT e firewall.
+- Servidor precisa iniciar conexão ao cliente.
+
+Hoje é pouco utilizado em ambientes modernos.
+
+---
+
+### 3.2 Passive Mode
+
+Fluxo:
+
+1. Cliente conecta na porta 21.
+2. Cliente solicita modo passivo.
+3. Servidor informa uma porta alta disponível.
+4. Cliente inicia segunda conexão para essa porta.
+
+Vantagens:
+- Compatível com NAT
+- Mais simples para firewall
+- Padrão mais utilizado atualmente
+
+Em ambientes corporativos, normalmente é obrigatório configurar intervalo de portas passivas.
+
+---
+
+## 4. Processo de Autenticação
+
+O FTP suporta:
+
+- Autenticação anônima (anonymous)
+- Autenticação local (usuários do sistema)
+- Integração com PAM
+
+Durante a autenticação padrão, usuário e senha são transmitidos em texto claro.
+
+Isso representa risco de interceptação (sniffing).
+
+---
+
+## 5. Limitações de Segurança do FTP
+
+FTP tradicional NÃO possui:
+
+- Criptografia de dados
+- Criptografia de credenciais
+- Proteção contra interceptação
+
+Riscos:
+
+- Captura de senha via tcpdump
+- Ataques Man-in-the-Middle
+- Exposição de arquivos sensíveis
+
+Por isso, em ambientes de produção recomenda-se:
+
+- FTPS (FTP sobre TLS)
+- SFTP (SSH File Transfer Protocol)
+
+---
+
+## 6. vsftpd (Very Secure FTP Daemon)
+
+vsftpd é um servidor FTP desenvolvido com foco em segurança e desempenho.
+
+Características:
+
+- Código enxuto
+- Separação de privilégios
+- Suporte a SSL/TLS
+- Integração com PAM
+- Controle refinado de permissões
+- Suporte a chroot
+
+É amplamente utilizado em distribuições baseadas em Red Hat, Debian e outras.
+
+---
+
+## 7. Arquitetura do vsftpd
+
+Principais componentes:
+
+- Daemon principal escutando na porta 21
+- Processos filhos por conexão
+- Integração com sistema de usuários Linux
+- Controle via arquivo:
+
+---
+
+## 8. Parâmetros Importantes do vsftpd
+
+Alguns parâmetros críticos:
+
+- anonymous_enable
+- local_enable
+- write_enable
+- chroot_local_user
+- pasv_enable
+- pasv_min_port
+- pasv_max_port
+- ssl_enable
+
+Cada um impacta diretamente segurança e funcionamento do serviço.
+
+---
+
+## 9. Conceito de Chroot
+
+O parâmetro:
+
+chroot_local_user=YES
+
+Restringe o usuário ao seu diretório home.
+
+Isso impede navegação pelo sistema de arquivos inteiro.
+
+É uma prática recomendada para reduzir superfície de ataque.
+
+---
+
+## 10. Integração com Firewall
+
+Para funcionamento correto do modo passivo é necessário:
+
+- Liberar porta 21/TCP
+- Liberar intervalo de portas passivas configuradas
+
+Sem isso, o login pode funcionar, mas a transferência falhará.
+
+---
+
+## 11. Integração com SELinux
+
+Em sistemas RHEL-like (Rocky Linux, AlmaLinux, CentOS):
+
+SELinux pode bloquear acesso a diretórios de usuários.
+
+Booleans relevantes:
+
+ftp_home_dir
+
+Isso deve ser considerado durante troubleshooting.
+
+---
+
+## 12. Logs e Monitoramento
+
+Logs normalmente localizados em:
+
+/var/log/vsftpd.log
+/var/log/messages
+
+
+Também pode ser monitorado via:
+
+journalctl -u vsftpd
+
+
+Monitoramento de logs é fundamental para:
+
+- Detectar tentativas de brute force
+- Identificar falhas de autenticação
+- Auditoria de acesso
+
+---
+
+## 13. Comparação: FTP vs FTPS vs SFTP
+
+| Protocolo | Criptografia | Porta padrão | Base |
+|-----------|-------------|--------------|------|
+| FTP       | Não         | 21           | TCP  |
+| FTPS      | Sim (TLS)   | 21 ou 990    | FTP + SSL |
+| SFTP      | Sim         | 22           | SSH |
+
+SFTP não é FTP com SSL.  
+É um protocolo completamente diferente baseado em SSH.
+
+---
+
+## 14. Cenários de Uso
+
+FTP ainda pode ser utilizado:
+
+- Ambientes internos controlados
+- Sistemas legados
+- Transferência automatizada em redes isoladas
+
+Não recomendado para internet pública sem criptografia.
+
+---
+
+## 15. Conclusão Técnica
+
+FTP é um protocolo funcional e simples, porém com limitações significativas de segurança.
+
+O uso do vsftpd permite:
+
+- Controle de usuários
+- Restrição de diretórios
+- Configuração de modo passivo
+- Integração com firewall e SELinux
+
+Para ambientes modernos, recomenda-se uso de criptografia (FTPS ou SFTP).
+
+

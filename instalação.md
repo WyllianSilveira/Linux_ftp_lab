@@ -94,3 +94,20 @@ Feb 27 20:37:37 VMLINUX systemd[1]: Started Vsftpd ftp daemon.
 ````
 
 Isso indica que o daemon está em execução e operando corretamente.
+
+## 5. Verificando se a porta 21 está em escuta
+
+O FTP utiliza por padrão a porta 21/TCP para o canal de controle.
+
+Para verificar se o serviço está escutando:
+````bash
+ss -lntp | grep :21
+````
+Saída esperada semelhante a:
+````bash
+LISTEN 0 32 0.0.0.0:21
+````
+Caso a porta não esteja em escuta, verificar os logs do serviço:
+````bash
+journalctl -u vsftpd
+````

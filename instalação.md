@@ -35,3 +35,13 @@ sudo dnf install vsftpd -y
 ```bash
 sudo yum install vsftpd -y
 ````
+
+### 3. Verificação da instalação
+
+Após a instalação, é importante confirmar que o pacote foi instalado corretamente.
+
+Em sistemas baseados em Red Hat:
+```bash
+rpm -qa | grep vsftpd
+````
+

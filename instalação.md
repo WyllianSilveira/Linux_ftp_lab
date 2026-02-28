@@ -72,7 +72,7 @@ Esse comando cria os links simbólicos necessários dentro do systemd para que o
 Inicia o serviço imediatamente, na sessão atual, sem necessidade de reinicializar o sistema.
 Esse comando é pontual e não garante que o serviço subirá automaticamente no próximo boot, caso o enable não tenha sido executado.
 
-Verificar status do serviço
+Verificar status do serviço:
 ````bash
 systemctl status vsftpd
 ````

@@ -36,7 +36,7 @@ sudo dnf install vsftpd -y
 sudo yum install vsftpd -y
 ````
 
-### 3. Verificação da instalação
+## 3. Verificação da instalação
 
 Após a instalação, é importante confirmar que o pacote foi instalado corretamente.
 
@@ -55,7 +55,7 @@ Saída obtida no laboratório:
 vsftpd-3.0.5-6.el9_7.2.x86_64
 ````
 
-### 4. Habilitando e iniciando o serviço
+## 4. Habilitando e iniciando o serviço
 
 Após a instalação, o serviço precisa ser habilitado e iniciado.
 ```bash

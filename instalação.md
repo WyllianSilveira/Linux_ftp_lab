@@ -111,3 +111,10 @@ Caso a porta não esteja em escuta, verificar os logs do serviço:
 ````bash
 journalctl -u vsftpd
 ````
+##6. Arquivo principal de configuração
+
+O arquivo de configuração padrão do vsftpd está localizado em:
+````bash
+/etc/vsftpd/vsftpd.conf
+````
+Esse arquivo será utilizado nas próximas etapas para ajustes de segurança e funcionamento do serviço.

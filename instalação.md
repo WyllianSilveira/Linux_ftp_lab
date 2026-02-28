@@ -25,6 +25,13 @@ O comando de instalação depende da distribuição utilizada.
 ```bash
 sudo apt update
 sudo apt install vsftpd -y
+````
 
-Distribuições baseadas em Red Hat (Rocky Linux, AlmaLinux, CentOS)
+###Distribuições baseadas em Red Hat (Rocky Linux, AlmaLinux, CentOS)
+```bash
 sudo dnf install vsftpd -y
+````
+###Em versões mais antigas:
+```bash
+sudo yum install vsftpd -y
+````

@@ -44,4 +44,7 @@ Em sistemas baseados em Red Hat:
 ```bash
 rpm -qa | grep vsftpd
 ````
-
+Saída obtida no laboratório:
+```bash
+vsftpd-3.0.5-6.el9_7.2.x86_64
+````
